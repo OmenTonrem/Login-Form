@@ -1,0 +1,315 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Contact Form</title>
+  <style>
+    body {
+      background-color: #e2f1e7;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      height: 100vh;
+      margin: 0;
+      font-family: 'blabla', sans-serif;
+    }
+    @font-face {
+      font-family: 'blabla';
+      src: url('./assets/fonts/Karla-VariableFont_wght.ttf') format('truetype');
+    }
+    @font-face {
+      font-family: 'blaabla';
+      src: url('./assets/fonts/Karla-Italic-VariableFont_wght.ttf') format('truetype');
+    }
+    .main {
+      background: #fff;
+      border-radius: 15px;
+      padding: 2rem;
+      width: 90%;
+      max-width: 600px;
+      box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+    }
+    header p {
+      font-size: 1.5rem;
+      font-weight: bold;
+      margin: 0 0 1rem;
+    }
+
+    .form-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 1rem;
+    }
+    .field-group {
+      display: flex;
+      flex-direction: column;
+      position: relative;
+    }
+    .field-group.fullWidth {
+      grid-column: 1 / -1;
+    }
+    label {
+      font-family: 'blaabla';
+      color: #54595a;
+      margin-bottom: 0.25rem;
+      cursor: pointer;
+    }
+    input[type="text"],
+    input[type="email"],
+    textarea {
+      border: 2px solid #a9afad;
+      border-radius: 6px;
+      padding: 0.5rem;
+      font-family: inherit;
+      font-size: 1rem;
+    }
+    textarea {
+      resize: vertical;
+      min-height: 6rem;
+    }
+    .error {
+      height: 0;
+      color: red;
+      font-size: 0.85rem;
+      margin-top: 0.25rem;
+      margin-bottom: 0.25rem;
+    }
+
+    .radio-options {
+      display: flex;
+      gap: 0.5rem;
+      margin-top: 0.5rem;
+    }
+    .radio-options label {
+      flex: 1;
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+      padding: 0.75rem;
+      border: 2px solid #a9afad;
+      border-radius: 5px;
+      font-family: 'blabla';
+      cursor: pointer;
+      transition: border-color 0.2s, background-color 0.2s;
+    }
+    .radio-options input {
+      -webkit-appearance: none;
+      appearance: none;
+      width: 1.2em;
+      height: 1.2em;
+      border: 2px solid #a9afad;
+      border-radius: 50%;
+      position: relative;
+      cursor: pointer;
+      margin: 0;
+      background-color: white;
+      background-repeat: no-repeat;
+      background-position: center;
+      transition: border-color 0.2s, background-color 0.2s;
+    }
+    .radio-options input:hover,
+    .radio-options input:focus {
+      border-color: #0c7d69;
+    }
+    .radio-options input:checked {
+      border-color: #0c7d69;
+      background-color: #0c7d69;
+      background-image: url("assets/images/icon-radio-selected.svg");
+    }
+
+    .wrapper {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.5rem;
+      position: relative;
+      cursor: pointer;
+      font-family: 'blabla';
+      color: #54595a;
+    }
+    .wrapper input {
+      position: absolute;
+      opacity: 0;
+      width: 0;
+      height: 0;
+    }
+    .wrapper .checkmark {
+      width: 1.2em;
+      height: 1.2em;
+      border: 2px solid #a9afad;
+      border-radius: 4px;
+      background-color: white;
+      background-repeat: no-repeat;
+      background-position: center;
+      transition: border-color 0.2s, background-color 0.2s;
+      flex-shrink: 0;
+    }
+    .wrapper input:checked + .checkmark {
+
+      border-color: white;
+
+      background-image: url("assets/images/icon-checkbox-check.svg");
+    }
+    .notification {
+      position: fixed;
+      top: 1rem;
+      left: 50%;
+      display: flex;
+      flex-direction: column;
+      transform: translateX(-50%) translateY(-100%);
+      background-color: #2a4244;
+      color: #effdfd;
+      padding: 0.75rem 1.5rem;
+      border-radius: 8px 8px 8px 8px;
+      font-size: 1rem;
+      z-index: 1000;
+      opacity: 0;
+
+      transition: transform 0.4s ease, opacity 0.4s ease;
+    }
+    .notification.show {
+      transform: translateX(-50%) translateY(0);
+      opacity: 1;
+    }
+
+    button {
+      grid-column: 1 / -1;
+      background-color: #0c7d69;
+      color: #e7ffff;
+      border: none;
+      border-radius: 7px;
+      padding: 0.75rem;
+      font-size: 1.1rem;
+      cursor: pointer;
+      font-family: 'blabla';
+      margin-top: 1rem;
+    }
+  </style>
+</head>
+<body>
+  <div class="notification" id="notif">
+    <div style="display: flex; gap: 5px;">
+      <img src="assets/images/icon-success-check.svg" alt="Seçili ikonu">
+      <p>Message Sent!</p>
+    </div>
+    <div style="display: flex; margin-top: -10px;">
+      <p style="color: #708684; font-size: 1rem;">Thanks for completing the form. We'll be in touch soon!</p>
+    </div>
+  </div>
+  <div class="main">
+    <header><p>Contact Us</p></header>
+    <form id="contactForm" novalidate>
+      <div class="form-grid">
+
+        <div class="field-group">
+          <label for="firstName">First Name *</label>
+          <input id="firstName" name="firstName" type="text" required>
+          <div class="error"></div>
+        </div>
+
+        <div class="field-group">
+          <label for="lastName">Last Name *</label>
+          <input id="lastName" name="lastName" type="text" required>
+          <div class="error"></div>
+        </div>
+
+        <div class="field-group fullWidth">
+          <label for="email">Email Address *</label>
+          <input id="email" name="email" type="email" required>
+          <div class="error"></div>
+        </div>
+
+        <div class="field-group fullWidth">
+          <label>Query Type *</label>
+          <div class="radio-options">
+            <label><input type="radio" name="query" value="general"> General Enquiry</label>
+            <label><input type="radio" name="query" value="support"> Support Request</label>
+          </div>
+          <div class="error"></div>
+        </div>
+
+        <div class="field-group fullWidth">
+          <label for="message">Message *</label>
+          <textarea id="message" name="message" required></textarea>
+          <div class="error"></div>
+        </div>
+
+        <div class="field-group fullWidth">
+          <label class="wrapper">
+            <input id="consent" name="consent" type="checkbox" required>
+            <span class="checkmark"></span>
+            I consent to being contacted by the team *
+          </label>
+          <div class="error"></div>
+        </div>
+
+        <button type="submit">Submit</button>
+      </div>
+    </form>
+  </div>
+
+  <script>
+    const form = document.getElementById('contactForm');
+    const notif = document.getElementById('notif');
+
+    form.addEventListener('submit', function(e) {
+      e.preventDefault();
+      clearErrors();
+      let valid = true;
+
+      function showErrorField(id, msg) {
+        const group = document.getElementById(id).closest('.field-group');
+        group.querySelector('.error').textContent = msg;
+        document.getElementById(id).style.borderColor = 'red';
+        valid = false;
+      }
+      function showErrorGroup(groupSelector, msg) {
+        const group = form.querySelector(groupSelector).closest('.field-group');
+        group.querySelector('.error').textContent = msg;
+        valid = false;
+      }
+
+
+      if (!form.firstName.value.trim()) {
+        showErrorField('firstName', 'This field is required');
+      }
+
+      if (!form.lastName.value.trim()) {
+        showErrorField('lastName', 'This field is required');
+      }
+
+      const emailVal = form.email.value.trim();
+      const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+      if (!emailRegex.test(emailVal)) {
+        showErrorField('email', 'Please enter a valid email address');
+      }
+
+      if (!form.query.value) {
+        showErrorGroup('input[name="query"]', 'Please select a query type');
+      }
+
+      if (!form.message.value.trim()) {
+        showErrorField('message', 'This field is required');
+      }
+
+      if (!form.consent.checked) {
+        showErrorGroup('.wrapper input', 'You must agree before submitting');
+      }
+
+      if (valid) {
+        notif.classList.add('show');
+        
+        setTimeout(() => notif.classList.remove('show'), 3000);
+        // form.submit(); 
+      }
+    });
+
+    function clearErrors() {
+      form.querySelectorAll('.error').forEach(el => el.textContent = '');
+      form.querySelectorAll('input, textarea').forEach(el => {
+        el.style.borderColor = '#a9afad';
+      });
+    }
+  </script>
+</body>
+</html>
